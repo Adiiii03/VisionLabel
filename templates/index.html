@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Upload Image · LabelVision{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-lg-5">
+          <h1 class="h3 mb-3">Upload an Image</h1>
+          <p class="text-secondary mb-4">
+            We’ll detect objects and draw bounding boxes with their labels and confidence scores.
+          </p>
+
+          <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" id="upload-form">
+            <div
+              class="dropzone-like mb-3 p-4 border rounded-3 bg-light text-center"
+              onclick="document.getElementById('file-input').click()"
+            >
+              <i class="bi bi-cloud-upload fs-1 text-secondary d-block mb-2"></i>
+              <p class="mb-1">Drag & drop your image here, or click to browse</p>
+              <small class="text-muted">JPG or PNG · up to 10 MB</small>
+            </div>
+
+            <input
+              id="file-input"
+              class="form-control"
+              type="file"
+              name="file"
+              accept=".jpg,.jpeg,.png"
+              required
+              hidden
+            />
+
+            <div id="file-info" class="mb-3 d-none">
+              <span class="badge text-bg-secondary">
+                <i class="bi bi-file-earmark-image"></i>
+                <span id="file-name"></span>
+              </span>
+            </div>
+
+            <div class="d-grid d-sm-flex gap-2">
+              <button id="submit-btn" class="btn btn-primary px-4" type="submit">
+                <span class="btn-text">
+                  <i class="bi bi-play-circle"></i> Analyze Image
+                </span>
+                <span class="btn-wait d-none">
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Processing...
+                </span>
+              </button>
+              <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('file-input').value='';toggleFileInfo(false);">
+                Clear
+              </button>
+            </div>
+          </form>
+
+          <hr class="my-4">
+          <p class="small text-muted mb-0">
+            Your image is processed locally and by AWS Rekognition. We do not store images beyond this session.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const fileInput = document.getElementById('file-input');
+  const fileInfo = document.getElementById('file-info');
+  const fileNameSpan = document.getElementById('file-name');
+  const form = document.getElementById('upload-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const btnText = submitBtn.querySelector('.btn-text');
+  const btnWait = submitBtn.querySelector('.btn-wait');
+
+  function toggleFileInfo(show) {
+    fileInfo.classList.toggle('d-none', !show);
+  }
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+      fileNameSpan.textContent = fileInput.files[0].name;
+      toggleFileInfo(true);
+    } else {
+      toggleFileInfo(false);
+    }
+  });
+
+  form.addEventListener('submit', () => {
+    submitBtn.disabled = true;
+    btnText.classList.add('d-none');
+    btnWait.classList.remove('d-none');
+  });
+</script>
+{% endblock %}

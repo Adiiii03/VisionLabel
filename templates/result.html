@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Results · LabelVision{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-4">
+          <h2 class="h5 mb-3">Detected Labels</h2>
+
+          {% if labels and labels|length > 0 %}
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th>Label</th>
+                    <th class="text-end">Confidence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for label in labels %}
+                  <tr>
+                    <td>
+                      <span class="badge rounded-pill text-bg-primary">{{ label['Name'] }}</span>
+                    </td>
+                    <td class="text-end">{{ label['Confidence']|round(1) }}%</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="text-muted">No labels returned.</p>
+          {% endif %}
+
+          <div class="d-grid gap-2 mt-3">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left"></i> Analyze Another Image
+            </a>
+            <a
+              class="btn btn-success"
+              href="{{ url_for('static', filename='uploads/' + labeled_image) }}"
+              download
+            >
+              <i class="bi bi-download"></i> Download Labeled Image
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <h2 class="h6 text-uppercase text-muted mb-3">Original</h2>
+          <img
+            src="{{ url_for('static', filename='uploads/' + original_image) }}"
+            class="img-fluid rounded border mb-4"
+            alt="Original image"
+          />
+          <h2 class="h6 text-uppercase text-muted mb-3">Processed</h2>
+          <img
+            src="{{ url_for('static', filename='uploads/' + labeled_image) }}"
+            class="img-fluid rounded border"
+            alt="Labeled image"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

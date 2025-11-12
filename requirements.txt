@@ -1,0 +1,6 @@
+flask
+gunicorn
+boto3
+pillow
+python-dotenv
+

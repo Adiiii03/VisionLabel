@@ -1,0 +1,22 @@
+/* Basic refinements */
+.card {
+    border-radius: 1rem;
+  }
+  
+  .dropzone-like {
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    border: 2px dashed #cfd8dc !important;
+  }
+  
+  .dropzone-like:hover {
+    background-color: #f8f9fa;
+    border-color: #90a4ae !important;
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.05);
+  }
+  
+  img {
+    max-height: 70vh;
+    object-fit: contain;
+  }
+  
